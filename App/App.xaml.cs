@@ -61,21 +61,21 @@ namespace SwiftList.App
             }
 
             string serviceExe = ServiceInstallManager.GetServiceExePath();
-            HookClient = new SwiftList.Core.Hook.HookIpcClient(serviceExe, settings.AutoElevateIfAdmin);
+            HookClient = new Core.Hook.HookIpcClient(serviceExe, settings.AutoElevateIfAdmin);
 
-            SwiftList.PluginSdk.ListControlIpcBridge.GetListItemsFunc = hwnd =>
+            PluginSdk.ListControlIpcBridge.GetListItemsFunc = hwnd =>
 
-                HookClient != null ? SwiftList.Core.Hook.ListIpcCoordinator.GetListItems(hwnd, HookClient.SendMessage) : Array.Empty<string>();
+                HookClient != null ? Core.Hook.ListIpcCoordinator.GetListItems(hwnd, HookClient.SendMessage) : Array.Empty<string>();
 
-            SwiftList.PluginSdk.ListControlIpcBridge.GetSelectedIndicesFunc = (hwnd, className) =>
+            PluginSdk.ListControlIpcBridge.GetSelectedIndicesFunc = (hwnd, className) =>
 
-                HookClient != null ? SwiftList.Core.Hook.ListIpcCoordinator.GetSelectedIndices(hwnd, className, HookClient.SendMessage) : Array.Empty<int>();
+                HookClient != null ? Core.Hook.ListIpcCoordinator.GetSelectedIndices(hwnd, className, HookClient.SendMessage) : Array.Empty<int>();
 
-            SwiftList.PluginSdk.ListControlIpcBridge.SelectItemAction = (hwnd, className, index, clearOthers, selectState) =>
+            PluginSdk.ListControlIpcBridge.SelectItemAction = (hwnd, className, index, clearOthers, selectState) =>
 
-                HookClient?.SendMessage(new SwiftList.Core.IpcMessage
+                HookClient?.SendMessage(new Core.IpcMessage
                 {
-                    Id = SwiftList.Core.IpcMessageId.SelectItem,
+                    Id = Core.IpcMessageId.SelectItem,
                     Hwnd = hwnd.ToInt64(),
                     StringVal1 = className,
                     IntVal = index,
@@ -84,11 +84,11 @@ namespace SwiftList.App
 
                 });
 
-            SwiftList.PluginSdk.ListControlIpcBridge.ClearSelectionAction = (hwnd, className) =>
+            PluginSdk.ListControlIpcBridge.ClearSelectionAction = (hwnd, className) =>
 
-                HookClient?.SendMessage(new SwiftList.Core.IpcMessage
+                HookClient?.SendMessage(new Core.IpcMessage
                 {
-                    Id = SwiftList.Core.IpcMessageId.ClearSelection,
+                    Id = Core.IpcMessageId.ClearSelection,
                     Hwnd = hwnd.ToInt64(),
                     StringVal1 = className
 
@@ -127,7 +127,7 @@ namespace SwiftList.App
 
             // Force load all plugins (actions and alias providers) on startup
 
-            _ = SwiftList.App.Services.PluginManager.Instance;
+            _ = PluginManager.Instance;
 
             // Now that all plugins are loaded, initialize translations.
 
@@ -137,16 +137,16 @@ namespace SwiftList.App
             {
                 // Register TranslationService delegate for decoupled plugins
 
-                SwiftList.PluginSdk.TranslationService.LookupFunc = key => SwiftList.App.Services.TranslationManager.Instance[key];
+                PluginSdk.TranslationService.LookupFunc = key => TranslationManager.Instance[key];
 
                 // Register IconService delegate for decoupled plugins
-                SwiftList.PluginSdk.IconService.GetIconFunc = (path, isDir) => ShellIconHelper.GetIconForPath(path, isDir);
+                PluginSdk.IconService.GetIconFunc = (path, isDir) => ShellIconHelper.GetIconForPath(path, isDir);
 
                 // Register Logger delegate for decoupled plugins
 
-                SwiftList.PluginSdk.Logger.LogAction = (msg, lvl) =>
+                PluginSdk.Logger.LogAction = (msg, lvl) =>
                 {
-                    SwiftList.Core.Logger.Log(msg, (SwiftList.Core.LogLevel)(int)lvl);
+                    Logger.Log(msg, (LogLevel)(int)lvl);
                 };
                 SwiftList.App.Services.TranslationManager.Instance.ReloadTranslations();
                 Logger.Log("[App] TranslationManager initialized.");
@@ -247,7 +247,7 @@ namespace SwiftList.App
 
         public static void HideInlineSearch()
         {
-            SwiftList.App.Services.InlineSearchManager.Instance.CloseInlineSearch();
+            InlineSearchManager.Instance.CloseInlineSearch();
         }
 
         private static void LogException(string source, Exception? ex)
@@ -257,7 +257,7 @@ namespace SwiftList.App
 
             // Show message box to alert user
 
-            MessageBox.Show(string.Format(SwiftList.App.Services.TranslationManager.Instance["Crash_Message"], source, ex?.Message, Logger.LogDir), SwiftList.App.Services.TranslationManager.Instance["Crash_Title"], MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show(string.Format(TranslationManager.Instance["Crash_Message"], source, ex?.Message, Logger.LogDir), TranslationManager.Instance["Crash_Title"], MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public static void ShowSettingsWindow(string? targetSection = null)
@@ -278,7 +278,7 @@ namespace SwiftList.App
             HookClient?.Dispose();
             HookClient = null;
             AppPipeService.StopServer();
-            SwiftList.App.Services.InlineSearchManager.Instance.Dispose();
+            InlineSearchManager.Instance.Dispose();
             CloseAllManagedWindows();
             if (_appMutex != null)
             {

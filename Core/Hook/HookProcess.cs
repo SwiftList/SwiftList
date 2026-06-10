@@ -97,7 +97,7 @@ namespace SwiftList.Core.Hook
                         _explorerTracker.OnExplorerDeactivated += () =>
                         {
                             _ipcServer.SendMessage(new IpcMessage { Id = IpcMessageId.ExplorerDeactivated });
-                            System.Threading.Tasks.Task.Run(() =>
+                            Task.Run(() =>
                             {
                                 try { Win32Api.TrimWorkingSet(); } catch { }
                             });

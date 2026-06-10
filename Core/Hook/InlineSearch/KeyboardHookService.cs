@@ -52,7 +52,7 @@ namespace SwiftList.Core.Hook.InlineSearch
             _hookId = KeyboardNativeMethods.SetWindowsHookEx(KeyboardNativeMethods.WH_KEYBOARD_LL, _proc, hMod, 0);
             if (_hookId == IntPtr.Zero)
             {
-                Logger.Log($"[KeyboardHookService] Failed to install keyboard hook! Error={Marshal.GetLastWin32Error()}", SwiftList.Core.LogLevel.Error);
+                Logger.Log($"[KeyboardHookService] Failed to install keyboard hook! Error={Marshal.GetLastWin32Error()}", LogLevel.Error);
             }
         }
 
@@ -169,7 +169,7 @@ namespace SwiftList.Core.Hook.InlineSearch
 
             if (_explorerTracker.ActiveInlineAdapter == null)
             {
-                var matched = SwiftList.PluginSdk.InlineSearchAdapterRegistry.GetMatchingAdapter(targetFocus, className, processName);
+                var matched = PluginSdk.InlineSearchAdapterRegistry.GetMatchingAdapter(targetFocus, className, processName);
                 if (matched != null)
                 {
                     _explorerTracker.SetActiveInlineAdapterDirectly(matched, targetFocus);
