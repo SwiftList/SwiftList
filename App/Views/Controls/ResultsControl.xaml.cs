@@ -20,9 +20,10 @@ namespace SwiftList.App
         {
             InitializeComponent();
             InitializeSelectionChangedHandlers();
-            
+
             // Dynamically load custom GridView columns from ResultColumnProviders
-            Loaded += (s, e) => {
+            Loaded += (s, e) =>
+            {
                 UpdateViewModeVisibility();
                 LoadDynamicColumns();
             };
@@ -256,7 +257,7 @@ namespace SwiftList.App
                             {
                                 vm.SortByColumn(cleanHeader);
                                 bool isAsc = vm.IsSortAscending;
-                                
+
                                 var gridView = LstGridResults.View as GridView;
                                 if (gridView != null)
                                 {
@@ -277,7 +278,7 @@ namespace SwiftList.App
                                     }
                                 }
                             }
-                            catch {}
+                            catch { }
                         }
                     }
                 }

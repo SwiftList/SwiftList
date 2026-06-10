@@ -92,7 +92,7 @@ namespace SwiftList.App.ViewModels.Search
                             if (tracker.IsActiveWindowExplorer)
                             {
                                 var localMatches = InlineListSearchHelper.GetLocalMatches(query, listItems, contextDirectory, token);
-                                 await PerformStreamingSearchAsync(query, null, contextDirectory, isInlineSearchContext, searchVersion, onResultsUpdated, onServiceUnavailable, token, localMatches);
+                                await PerformStreamingSearchAsync(query, null, contextDirectory, isInlineSearchContext, searchVersion, onResultsUpdated, onServiceUnavailable, token, localMatches);
                                 return;
                             }
                             else
@@ -180,21 +180,21 @@ namespace SwiftList.App.ViewModels.Search
                     }
 
                     var uiResults = SearchResultMapper.BuildQuickResults(snapshot, query, searchScope, contextDirectory, isInlineSearchContext);
-                    
+
                     if (localMatches != null && localMatches.Count > 0)
                     {
                         var combinedResults = new List<AppSearchResult>();
-                        
+
                         if (uiResults.Count > 0)
                         {
                             SearchResultMapper.AddSectionHeader(combinedResults, TranslationManager.Instance["Search_LocalFolderHeader"] ?? "Current Folder", query);
                         }
-                        
+
                         foreach (var match in localMatches)
                         {
                             combinedResults.Add(match);
                         }
-                        
+
                         if (uiResults.Count > 0)
                         {
                             SearchResultMapper.AddSectionHeader(combinedResults, TranslationManager.Instance["Search_GlobalSearchHeader"] ?? "Global Search", query);
@@ -203,7 +203,7 @@ namespace SwiftList.App.ViewModels.Search
                                 combinedResults.Add(res);
                             }
                         }
-                        
+
                         for (int idx = 0; idx < combinedResults.Count; idx++)
                         {
                             combinedResults[idx].Index = idx;

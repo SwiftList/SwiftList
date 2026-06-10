@@ -97,7 +97,7 @@ namespace SwiftList.Tutorial.ViewModels
         public TutorialViewModel()
         {
             CurrentStep = 0; // Starts with Welcome screen
-            
+
             _trackerTimer = new DispatcherTimer();
             _trackerTimer.Interval = TimeSpan.FromMilliseconds(100);
             _trackerTimer.Tick += TrackerTimer_Tick;

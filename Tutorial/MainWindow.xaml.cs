@@ -15,7 +15,7 @@ namespace SwiftList.Tutorial
             InitializeComponent();
             _viewModel = new TutorialViewModel();
             this.DataContext = _viewModel;
-            
+
             // Allow window dragging
             this.MouseDown += (s, e) =>
             {

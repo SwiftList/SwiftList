@@ -80,7 +80,7 @@ namespace SwiftList.Tutorial.Helpers
                         int nextBold = text.IndexOf("**", i);
                         int nextCode = text.IndexOf('`', i);
                         int nextSpecial;
-                        
+
                         if (nextBold != -1 && nextCode != -1)
                             nextSpecial = Math.Min(nextBold, nextCode);
                         else if (nextBold != -1)

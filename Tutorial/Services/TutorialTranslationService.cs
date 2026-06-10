@@ -20,9 +20,9 @@ namespace SwiftList.Tutorial.Services
             string culture = System.Globalization.CultureInfo.CurrentUICulture.Name;
             // Fallback strategy: if it's zh-CN, zh-HK, zh-TW, etc. use zh-CN, otherwise default to en-US.
             string targetCulture = culture.StartsWith("zh", StringComparison.OrdinalIgnoreCase) ? "zh-CN" : "en-US";
-            
+
             string resourceCulture = targetCulture.Replace('-', '_');
-            
+
             var assembly = Assembly.GetExecutingAssembly();
             string resourceName = $"SwiftList.Tutorial.Resources.Translations.{resourceCulture}.Tutorial.json";
 

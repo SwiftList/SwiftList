@@ -77,7 +77,7 @@ namespace SwiftList.App.Services
             {
                 _window.Owner = owner;
                 _window.Show();
-                
+
                 // Attach window position tracking
                 owner.LocationChanged += Owner_LocationChanged;
                 owner.SizeChanged += Owner_SizeChanged;
