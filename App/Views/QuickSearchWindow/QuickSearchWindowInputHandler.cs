@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
@@ -24,7 +25,7 @@ namespace SwiftList.App.Views.QuickSearchWindow
             {
                 if (_window.LstResults.SelectedItem is AppSearchResult result && !result.IsSearchSectionHeader && !result.IsEmptyResult && !result.IsApplication)
                 {
-                    if (result.ResultKind == "File" || result.ResultKind == "Folder" || System.IO.File.Exists(result.FullPath) || System.IO.Directory.Exists(result.FullPath))
+                    if (result.ResultKind == "File" || result.ResultKind == "Folder" || File.Exists(result.FullPath) || Directory.Exists(result.FullPath))
                     {
                         try
                         {
@@ -33,8 +34,8 @@ namespace SwiftList.App.Views.QuickSearchWindow
 
                             try
                             {
-                                string tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "swiftlist_copied.tmp");
-                                System.IO.File.WriteAllText(tempPath, result.FullPath);
+                                string tempPath = Path.Combine(Path.GetTempPath(), "swiftlist_copied.tmp");
+                                File.WriteAllText(tempPath, result.FullPath);
                             }
                             catch { }
 

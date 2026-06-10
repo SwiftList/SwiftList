@@ -53,7 +53,7 @@ namespace SwiftList.Core
 
             catch (Exception ex)
             {
-                Logger.Log($"[SearchService] Streaming search failed: {ex.Message}", SwiftList.Core.LogLevel.Error);
+                Logger.Log($"[SearchService] Streaming search failed: {ex.Message}", LogLevel.Error);
                 return SearchNetworkDrives(query, fileCandidateLimit, directoryFilter, exclusionRules, onResult, token);
             }
         }
@@ -119,7 +119,7 @@ namespace SwiftList.Core
 
             catch (Exception ex)
             {
-                Logger.Log($"[PipeClient] SendPipeCommand failed for {msg.Id}: {ex.Message}", SwiftList.Core.LogLevel.Error);
+                Logger.Log($"[PipeClient] SendPipeCommand failed for {msg.Id}: {ex.Message}", LogLevel.Error);
                 return new PipeResponse { Kind = PipeResponseKind.Error, Message = ex.Message };
             }
         }
@@ -160,7 +160,7 @@ namespace SwiftList.Core
 
             catch (Exception ex)
             {
-                Logger.Log($"[SearchService] Network drive search failed: {ex.Message}", SwiftList.Core.LogLevel.Error);
+                Logger.Log($"[SearchService] Network drive search failed: {ex.Message}", LogLevel.Error);
                 return false;
             }
         }

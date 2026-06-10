@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Runtime;
 using SwiftList.Core.SearchIndex.RecordIndex;
 
 namespace SwiftList.Core.Indexer.Usn
@@ -128,7 +129,7 @@ namespace SwiftList.Core.Indexer.Usn
         {
             try
             {
-                System.Runtime.GCSettings.LargeObjectHeapCompactionMode = System.Runtime.GCLargeObjectHeapCompactionMode.CompactOnce;
+                GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
                 Win32Api.TrimWorkingSet();
             }
             catch { }

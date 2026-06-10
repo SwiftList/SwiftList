@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.Threading;
+using System.Runtime.InteropServices;
 using SwiftList.Core;
 using SwiftList.PluginSdk;
 
@@ -55,7 +56,7 @@ namespace SwiftList.Core.Hook
                 {
                     uint threadId = KeyboardNativeMethods.GetWindowThreadProcessId(rootHwnd, out _);
                     var guiInfo = new KeyboardNativeMethods.GUITHREADINFO();
-                    guiInfo.cbSize = System.Runtime.InteropServices.Marshal.SizeOf(guiInfo);
+                    guiInfo.cbSize = Marshal.SizeOf(guiInfo);
                     if (KeyboardNativeMethods.GetGUIThreadInfo(threadId, ref guiInfo) && guiInfo.hwndFocus != IntPtr.Zero)
                     {
                         focusedHwnd = guiInfo.hwndFocus;

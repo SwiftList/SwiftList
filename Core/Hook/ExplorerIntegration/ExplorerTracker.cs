@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Runtime.InteropServices;
 using SwiftList.Core;
 using SwiftList.PluginSdk;
 
@@ -242,7 +243,7 @@ namespace SwiftList.Core.Hook
             }
 
             var nativeRect = new ExplorerNativeHooks.RECT();
-            int result = ExplorerNativeHooks.DwmGetWindowAttribute(ActiveHwnd, ExplorerNativeHooks.DWMWA_EXTENDED_FRAME_BOUNDS, out nativeRect, System.Runtime.InteropServices.Marshal.SizeOf<ExplorerNativeHooks.RECT>());
+            int result = ExplorerNativeHooks.DwmGetWindowAttribute(ActiveHwnd, ExplorerNativeHooks.DWMWA_EXTENDED_FRAME_BOUNDS, out nativeRect, Marshal.SizeOf<ExplorerNativeHooks.RECT>());
             if (result == 0)
             {
                 rect = new RECT { Left = nativeRect.Left, Top = nativeRect.Top, Right = nativeRect.Right, Bottom = nativeRect.Bottom };
@@ -332,7 +333,7 @@ namespace SwiftList.Core.Hook
 
         public void Dispose() => Stop();
 
-        [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct RECT
         {
             public int Left, Top, Right, Bottom;

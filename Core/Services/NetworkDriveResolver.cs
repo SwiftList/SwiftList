@@ -40,7 +40,7 @@ namespace SwiftList.Core
             }
             catch (Exception ex)
             {
-                Logger.Log($"[NetworkDriveResolver] Failed to get network drives: {ex.Message}", SwiftList.Core.LogLevel.Error);
+                Logger.Log($"[NetworkDriveResolver] Failed to get network drives: {ex.Message}", LogLevel.Error);
             }
 
             return results.OrderBy(d => d.Letter).ToList();

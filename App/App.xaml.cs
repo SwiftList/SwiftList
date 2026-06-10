@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Runtime.InteropServices;
 using SwiftList.Core;
 using SwiftList.Core.Services;
 using SwiftList.App.ViewModels;
@@ -14,8 +15,8 @@ namespace SwiftList.App
 {
     public partial class App : Application
     {
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool AllowSetForegroundWindow(int dwProcessId);
         private System.Threading.Mutex? _appMutex;
         public static SwiftList.Core.Hook.HookIpcClient? HookClient { get; private set; }

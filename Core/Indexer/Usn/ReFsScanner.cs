@@ -104,7 +104,7 @@ namespace SwiftList.Core.Indexer.Usn
             }
             catch (Exception ex)
             {
-                Logger.Log($"[ReFsScanner] ReFS Scan error on {drive}: {ex.Message}", SwiftList.Core.LogLevel.Error);
+                Logger.Log($"[ReFsScanner] ReFS Scan error on {drive}: {ex.Message}", LogLevel.Error);
                 return null;
             }
             finally

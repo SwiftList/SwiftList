@@ -25,14 +25,14 @@ namespace SwiftList.Core.Indexer.Usn
             );
             if (handle.IsInvalid)
             {
-                Logger.Log($"[JournalReader] Failed to open drive {drive} handle.", SwiftList.Core.LogLevel.Error);
+                Logger.Log($"[JournalReader] Failed to open drive {drive} handle.", LogLevel.Error);
                 return null;
             }
             string fsType = VolumeHelper.GetFileSystemType(drive);
             var rootFrn = VolumeHelper.GetRootFrn(drive);
             if (!rootFrn.HasValue)
             {
-                Logger.Log($"[JournalReader] Failed to resolve root FRN on {drive}.", SwiftList.Core.LogLevel.Error);
+                Logger.Log($"[JournalReader] Failed to resolve root FRN on {drive}.", LogLevel.Error);
                 return null;
             }
             byte[] queryBuf = new byte[56];
@@ -50,7 +50,7 @@ namespace SwiftList.Core.Indexer.Usn
             {
                 int err = Marshal.GetLastWin32Error();
                 fsType = VolumeHelper.GetFileSystemType(drive);
-                Logger.Log($"[JournalReader] Failed to query USN journal on {drive}. Error: {err}, FileSystem: {fsType}", SwiftList.Core.LogLevel.Warn);
+                Logger.Log($"[JournalReader] Failed to query USN journal on {drive}. Error: {err}, FileSystem: {fsType}", LogLevel.Warn);
 
                 if (fsType.Equals("NTFS", StringComparison.OrdinalIgnoreCase) || fsType.Equals("ReFS", StringComparison.OrdinalIgnoreCase))
                 {
@@ -85,14 +85,14 @@ namespace SwiftList.Core.Indexer.Usn
                     else
                     {
                         int createErr = Marshal.GetLastWin32Error();
-                        Logger.Log($"[JournalReader] Failed to create USN journal on {drive}. Error: {createErr}", SwiftList.Core.LogLevel.Error);
+                        Logger.Log($"[JournalReader] Failed to create USN journal on {drive}. Error: {createErr}", LogLevel.Error);
                     }
                 }
             }
 
             if (!success)
             {
-                Logger.Log($"[JournalReader] Failed to query USN journal on {drive}.", SwiftList.Core.LogLevel.Error);
+                Logger.Log($"[JournalReader] Failed to query USN journal on {drive}.", LogLevel.Error);
                 return null;
             }
 
@@ -135,7 +135,7 @@ namespace SwiftList.Core.Indexer.Usn
                     if (err == Win32Api.ERROR_HANDLE_EOF)
                         break;
 
-                    Logger.Log($"[JournalReader] FSCTL_ENUM_USN_DATA on {drive} failed. Error: {err}", SwiftList.Core.LogLevel.Error);
+                    Logger.Log($"[JournalReader] FSCTL_ENUM_USN_DATA on {drive} failed. Error: {err}", LogLevel.Error);
                     break;
                 }
 
@@ -167,7 +167,7 @@ namespace SwiftList.Core.Indexer.Usn
                     }
                     catch (Exception ex)
                     {
-                        Logger.Log($"[JournalReader] Record parsing error on {drive}: {ex}", SwiftList.Core.LogLevel.Error);
+                        Logger.Log($"[JournalReader] Record parsing error on {drive}: {ex}", LogLevel.Error);
                     }
 
                     offset += (int)recordLen;
@@ -194,7 +194,7 @@ namespace SwiftList.Core.Indexer.Usn
 
             if (handle.IsInvalid)
             {
-                Logger.Log($"[JournalReader] Failed to open drive {drive} handle for catch-up.", SwiftList.Core.LogLevel.Error);
+                Logger.Log($"[JournalReader] Failed to open drive {drive} handle for catch-up.", LogLevel.Error);
                 return -1;
             }
 
@@ -211,7 +211,7 @@ namespace SwiftList.Core.Indexer.Usn
 
             if (!success)
             {
-                Logger.Log($"[JournalReader] Failed to query USN journal for catch-up on {drive}.", SwiftList.Core.LogLevel.Error);
+                Logger.Log($"[JournalReader] Failed to query USN journal for catch-up on {drive}.", LogLevel.Error);
                 return -1;
             }
 
@@ -220,7 +220,7 @@ namespace SwiftList.Core.Indexer.Usn
 
             if (currentJournalId != journalId)
             {
-                Logger.Log($"[JournalReader] Journal ID mismatch on {drive} (expected {journalId}, got {currentJournalId}). Need full re-index.", SwiftList.Core.LogLevel.Warn);
+                Logger.Log($"[JournalReader] Journal ID mismatch on {drive} (expected {journalId}, got {currentJournalId}). Need full re-index.", LogLevel.Warn);
                 return -1;
             }
 
@@ -254,7 +254,7 @@ namespace SwiftList.Core.Indexer.Usn
                 if (!success)
                 {
                     int err = Marshal.GetLastWin32Error();
-                    Logger.Log($"[JournalReader] FSCTL_READ_USN_JOURNAL failed during catch-up on {drive}: {err}", SwiftList.Core.LogLevel.Error);
+                    Logger.Log($"[JournalReader] FSCTL_READ_USN_JOURNAL failed during catch-up on {drive}: {err}", LogLevel.Error);
                     return -1;
                 }
 
@@ -283,7 +283,7 @@ namespace SwiftList.Core.Indexer.Usn
                     }
                     catch (Exception ex)
                     {
-                        Logger.Log($"[JournalReader] Catch-up record parse error on {drive}: {ex}", SwiftList.Core.LogLevel.Error);
+                        Logger.Log($"[JournalReader] Catch-up record parse error on {drive}: {ex}", LogLevel.Error);
                     }
 
                     offset += (int)recordLen;

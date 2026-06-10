@@ -112,7 +112,7 @@ namespace SwiftList.Service
                 {
                     try
                     {
-                        string dllName = System.IO.Path.GetFileName(obj.GetType().Assembly.Location);
+                        string dllName = Path.GetFileName(obj.GetType().Assembly.Location);
                         string typeName = obj.GetType().Name;
                         var settings = UserSettings.Load();
                         // Match the same ID format used by App's ComponentFilter

@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Diagnostics;
 
 namespace SwiftList.Core.Hook.InlineSearch
 {
@@ -127,12 +130,12 @@ namespace SwiftList.Core.Hook.InlineSearch
             {
                 try
                 {
-                    var sb = new System.Text.StringBuilder(1024);
+                    var sb = new StringBuilder(1024);
                     uint size = (uint)sb.Capacity;
                     if (KeyboardNativeMethods.QueryFullProcessImageName(hProcess, 0, sb, ref size))
                     {
                         string fullPath = sb.ToString();
-                        return System.IO.Path.GetFileName(fullPath); // Returns name with extension, e.g. "cmd.exe"
+                        return Path.GetFileName(fullPath); // Returns name with extension, e.g. "cmd.exe"
                     }
                 }
                 finally
@@ -144,7 +147,7 @@ namespace SwiftList.Core.Hook.InlineSearch
             // Fallback to .NET Process class (in case OpenProcess fails or limited info is not available, though unlikely)
             try
             {
-                using var process = System.Diagnostics.Process.GetProcessById((int)processId);
+                using var process = Process.GetProcessById((int)processId);
                 return process.ProcessName; // Returns name without extension, e.g. "cmd"
             }
             catch

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Text;
 using SwiftList.Tutorial.Models;
 
@@ -65,14 +66,14 @@ namespace SwiftList.Tutorial.Helpers
                 {
                     try
                     {
-                        string tempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "swiftlist_copied.tmp");
-                        if (System.IO.File.Exists(tempPath))
+                        string tempPath = Path.Combine(Path.GetTempPath(), "swiftlist_copied.tmp");
+                        if (File.Exists(tempPath))
                         {
-                            string file = System.IO.File.ReadAllText(tempPath);
+                            string file = File.ReadAllText(tempPath);
                             if (file != null && file.Contains("sl_demo", StringComparison.OrdinalIgnoreCase))
                             {
                                 todoItems[1].IsCompleted = true;
-                                try { System.IO.File.Delete(tempPath); } catch { }
+                                try { File.Delete(tempPath); } catch { }
                             }
                         }
                     }
