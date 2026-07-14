@@ -73,7 +73,15 @@ internal static class ShellImageListInterop
 
         var shfi = new ShellIconNativeMethods.SHFILEINFOW();
         var r = ShellIconNativeMethods.SHGetFileInfoW(path, attrs, ref shfi, (uint)Marshal.SizeOf(shfi), SHGFI_SYSICONINDEX | extraFlags);
-        return r == IntPtr.Zero ? null : FromImageList(shfi.iIcon);
+        if (r == IntPtr.Zero) return null;
+
+        // USEFILEATTRIBUTES uses a fake path (e.g. ".dll"); the shell image-list at JUMBO
+        // centres a small (48px) icon inside a 256px canvas, so after WPF scaling the
+        // visible icon shrinks to a speck in the top-left. Force EXTRALARGE (48px).
+        var shil = (extraFlags & ShellIconNativeMethods.SHGFI_USEFILEATTRIBUTES) != 0
+            ? SHIL_EXTRALARGE
+            : CurrentShil();
+        return FromImageList(shfi.iIcon, shil);
     }
 
     public static ImageSource? TryGetIconPidl(IntPtr pidl)
@@ -179,12 +187,13 @@ internal static class ShellImageListInterop
         catch { return null; }
     }
 
-    private static ImageSource? FromImageList(int iIcon)
+    private static ImageSource? FromImageList(int iIcon, int shil = -1)
     {
+        if (shil < 0) shil = CurrentShil();
         IImageList? list = null;
         try
         {
-            if (SHGetImageList(CurrentShil(), ref _iidImageList, out list) < 0 || list == null)
+            if (SHGetImageList(shil, ref _iidImageList, out list) < 0 || list == null)
                 return null;
             if (list.GetIcon(iIcon, ILD_TRANSPARENT, out var hicon) < 0 || hicon == IntPtr.Zero)
                 return null;
@@ -205,6 +214,19 @@ internal static class ShellImageListInterop
     private static ImageSource FromHIcon(IntPtr hicon)
     {
         var bmp = Imaging.CreateBitmapSourceFromHIcon(hicon, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+        // CreateBitmapSourceFromHIcon inherits system DPI (e.g. 192 on 200% scale).
+        // WPF layout computes physical size as pixels / DPI x 96, so on high-DPI the
+        // bitmap renders too small. Force 96 DPI so pixel dimensions == WPF units.
+        if (bmp.DpiX != 96 || bmp.DpiY != 96)
+        {
+            var stride = bmp.PixelWidth * ((bmp.Format.BitsPerPixel + 7) / 8);
+            var pixels = new byte[stride * bmp.PixelHeight];
+            bmp.CopyPixels(pixels, stride, 0);
+            var fixedDpi = new WriteableBitmap(bmp.PixelWidth, bmp.PixelHeight, 96, 96, bmp.Format, null);
+            fixedDpi.WritePixels(new Int32Rect(0, 0, bmp.PixelWidth, bmp.PixelHeight), pixels, stride, 0);
+            fixedDpi.Freeze();
+            return fixedDpi;
+        }
         bmp.Freeze();
         return bmp;
     }
