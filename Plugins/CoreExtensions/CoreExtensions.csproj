@@ -6,7 +6,7 @@
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>SwiftList.Plugins.CoreExtensions</AssemblyName>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
       <GenerateDependencyFile>false</GenerateDependencyFile>
   </PropertyGroup>
 
