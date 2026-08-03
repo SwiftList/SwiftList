@@ -93,7 +93,9 @@ public partial class QuickLookWindow : Window
     {
         if (msg == WM_EXITSIZEMOVE)
         {
+            BeginAnimation(LeftProperty, null);
             Services.QuickLookManager.Instance.SetUserResizedDimensions(Width, Height);
+            Services.QuickLookManager.Instance.SetUserMovedPosition(Left, Top);
         }
         return IntPtr.Zero;
     }

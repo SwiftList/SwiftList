@@ -26,9 +26,13 @@ public partial class QuickLookManager
             // an animated dependency property pinned to the animation's value until the clock is cleared,
             // so a bare assignment here would silently be ignored while one is active.
             _window.BeginAnimation(Window.LeftProperty, null);
-            _window.Top = rect.OuterTop;
+            _window.Top = _sessionTop ?? rect.OuterTop;
 
-            if (animate)
+            if (_sessionLeft.HasValue)
+            {
+                _window.Left = _sessionLeft.Value;
+            }
+            else if (animate)
             {
                 // Slide out like a drawer: start just short of the resting spot, on the side it docked
                 // to, and ease out to it -- rather than just snapping into place.

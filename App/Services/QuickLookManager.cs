@@ -20,11 +20,19 @@ public partial class QuickLookManager
     private bool _userWantsPreview;
     private double? _sessionWidth;
     private double? _sessionHeight;
+    private double? _sessionLeft;
+    private double? _sessionTop;
 
     public void SetUserResizedDimensions(double width, double height)
     {
         _sessionWidth = width;
         _sessionHeight = height;
+    }
+
+    public void SetUserMovedPosition(double left, double top)
+    {
+        _sessionLeft = left;
+        _sessionTop = top;
     }
     // Tracked separately (not just "is _owner non-null") since external-preview mode attaches
     // LocationChanged/SizeChanged but deliberately NOT Deactivated -- see ShowOrUpdate's own comment.
@@ -105,6 +113,8 @@ public partial class QuickLookManager
         _userWantsPreview = false;
         _sessionWidth = null;
         _sessionHeight = null;
+        _sessionLeft = null;
+        _sessionTop = null;
         Hide();
     }
 
