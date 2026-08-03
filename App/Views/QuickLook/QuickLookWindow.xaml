@@ -65,7 +65,7 @@
             </Grid>
 
             <!-- Footer: Size and Dates -->
-            <Grid Grid.Row="2" Margin="0,8,0,0">
+            <Grid x:Name="FooterGrid" Grid.Row="2" Margin="0,8,0,0" Background="Transparent" Cursor="SizeAll">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
